@@ -18,7 +18,7 @@ const getImageUrl = (imageUrl) => {
 </script>
 
 <template>
-  <div class="card h-100 mb-4 shadow-sm">
+  <div class="card h-100 shadow-sm">
     <img :src="getImageUrl(recipe?.imageUrl)" class="img-fluid rounded" :alt="recipe?.title">
     <div class="card-body">
       <h5 class="card-title">{{ recipe.title }}</h5>

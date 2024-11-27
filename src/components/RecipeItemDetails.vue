@@ -19,7 +19,7 @@ const getImageUrl = (imageUrl) => {
 
 <template>
   <div class="row">
-    <div class="col-md-8 offset-md-2">
+    <div class="col-md-8 offset-md-2 mb-3">
       <div class="card h-100">
         <img :src="getImageUrl(recipe?.imageUrl)" class="img-fluid rounded" :alt="recipe?.title">
         <div class="card-body">

@@ -13,7 +13,7 @@ defineProps(
 
 <template>
   <div class="row">
-    <div class="col-md-4" v-for="recipe in recipes" :key="recipe.id">
+    <div class="col-md-4 mb-3" v-for="recipe in recipes" :key="recipe.id">
       <RecipeItem :recipe="recipe" />
     </div>
   </div>
