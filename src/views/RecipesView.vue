@@ -17,6 +17,14 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="container mt-3 rounded text-center">
+    <!-- Button to navigate to the Add Recipe page -->
+    <router-link to="/recipes/add">
+      <button class="btn btn-primary text-white"><i class="bi bi-plus"></i> Rezept
+        hinzufügen</button>
+    </router-link>
+  </div>
+  
   <div class="container mt-3">
     <RecipeList :recipes="recipes" />
   </div>

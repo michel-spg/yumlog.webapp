@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import RecipesView from '@/views/RecipesView.vue'
 import RecipeDetailsView from '@/views/RecipeDetailsView.vue'
+import AddRecipeView from '@/views/AddRecipeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,11 @@ const router = createRouter({
       path: '/recipes/:id',
       name: 'recipeDetails',
       component: RecipeDetailsView
+    },
+    {
+      path: '/recipes/add',
+      name: 'addRecipe',
+      component: AddRecipeView
     },
     {
       path: "/:catchAll(.*)",
