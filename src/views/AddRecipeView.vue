@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const title = ref('');
 const description = ref('');
@@ -9,6 +9,7 @@ const ingredients = ref([{ name: '', amount: '' }]);
 const imageFile = ref(null); // Holds the image file
 const successMessage = ref(''); // Holds the success message
 const isFormVisible = ref(true); // Controls form visibility
+const startValidation = ref(false);
 
 // Add a new ingredient row
 const addIngredient = () => {
@@ -25,29 +26,40 @@ const handleImageUpload = (event) => {
   imageFile.value = event.target.files[0];
 };
 
+// Form validation
+const isValidTitle = computed(() => title.value.length > 2);
+
 const addRecipe = async () => {
-  const formData = new FormData();
+  startValidation.value = true;// Start validation
+  console.log(isValidTitle.value);
 
-  formData.append('title', title.value);
-  formData.append('description', description.value);
-  formData.append('duration', duration.value);
-  formData.append('instructions', instructions.value);
-  formData.append('image', imageFile.value);
+  if (isValidTitle.value) {
+    const formData = new FormData();
 
-  ingredients.value.forEach((ingredient, index) => {
-    formData.append(`ingredients[${index}][name]`, ingredient.name);
-    formData.append(`ingredients[${index}][amount]`, ingredient.amount);
-  });
+    formData.append('title', title.value);
+    formData.append('description', description.value);
+    formData.append('duration', duration.value);
+    formData.append('instructions', instructions.value);
+    formData.append('image', imageFile.value);
 
-  const response = await fetch('http://localhost:3000/api/recipes', {
-    method: 'POST',
-    body: formData,
-  });
+    ingredients.value.forEach((ingredient, index) => {
+      formData.append(`ingredients[${index}][name]`, ingredient.name);
+      formData.append(`ingredients[${index}][amount]`, ingredient.amount);
+    });
 
-  if (response.ok) {
-    // Show success message and hide form
-    successMessage.value = 'Rezept hinzugefügt!';
-    isFormVisible.value = false; // Hide the form
+    const response = await fetch('http://localhost:3000/api/recipes', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      // Show success message and hide form
+      successMessage.value = 'Rezept hinzugefügt!';
+      isFormVisible.value = false; // Hide the form
+    }
+  } else {
+    isFormVisible.value = true; // Show the form
+    console.log('Form validation failed');
   }
 };
 </script>
@@ -65,6 +77,8 @@ const addRecipe = async () => {
           <div class="mb-3">
             <label for="title" class="form-label">Titel</label>
             <input type="text" class="form-control" id="title" v-model="title" required />
+            <p v-if="startValidation && !isValidTitle" class="text-danger">Der Titel muss mindestens 3 Zeichen lang
+              sein.</p>
           </div>
 
           <div class="mb-3">
@@ -92,8 +106,7 @@ const addRecipe = async () => {
           <div class="mb-3">
             <label class="form-label">Zutaten</label>
             <div v-for="(ingredient, index) in ingredients" :key="index" class="input-group mb-2">
-              <input type="text" class="form-control" placeholder="Name" v-model="ingredient.name"
-                required />
+              <input type="text" class="form-control" placeholder="Name" v-model="ingredient.name" required />
               <input type="text" class="form-control" placeholder="Menge" v-model="ingredient.amount" required />
               <button type="button" class="btn btn-danger" @click="removeIngredient(index)"
                 v-if="ingredients.length > 1">
