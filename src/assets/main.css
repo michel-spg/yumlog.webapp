@@ -102,3 +102,27 @@
   width: 18px;
   height: 18px;
 }
+
+.alert {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+/* Navbar Button Styles */
+.btn-link {
+  text-decoration: none;
+  padding: 0;
+  border: none;
+}
+
+.btn-link:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
