@@ -51,7 +51,7 @@ export default {
       console.log('Login attempted with:', this.email)
       try {
         await this.authStore.loginWithEmail(this.email, this.password)
-        this.router.push('/bikes')
+        this.router.push('/recipes')
       } catch (error) {
         console.error('Login failed:', error)
       }
@@ -60,7 +60,7 @@ export default {
       console.log('Google Sign-In attempted')
       try {
         await this.authStore.loginWithGoogle()
-        this.router.push('/bikes')
+        this.router.push('/recipes')
       } catch (error) {
         console.error('Google sign-in failed:', error)
       }

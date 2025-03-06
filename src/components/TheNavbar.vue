@@ -23,7 +23,7 @@
         </li>
         <li class="nav-item">
           <button class="nav-link fs-4 btn btn-link" @click="handleLogout">
-            Logout
+            <i class="bi bi-box-arrow-right"></i> Logout
           </button>
         </li>
       </ul>
