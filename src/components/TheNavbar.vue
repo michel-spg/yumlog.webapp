@@ -3,18 +3,18 @@
     <div class="container">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <RouterLink class="nav-link fs-4" to="/">Home</RouterLink>
+          <RouterLink class="nav-link fs-4 yumlog-logo" to="/">YumLog</RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink class="nav-link fs-4" to="/recipes">Rezepte</RouterLink>
+          <RouterLink class="nav-link fs-4" to="/recipes"><i class="bi bi-book"></i> Rezepte</RouterLink>
         </li>
       </ul>
       <ul v-if="!authStore.isAuthenticated" class="navbar-nav ms-auto">
         <li class="nav-item">
-          <RouterLink class="nav-link fs-4" to="/signup">Register</RouterLink>
+          <RouterLink class="nav-link fs-4" to="/signup"><i class="bi bi-person-plus"></i> Register</RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink class="nav-link fs-4" to="/signin">Login</RouterLink>
+          <RouterLink class="nav-link fs-4" to="/signin"><i class="bi bi-box-arrow-in-right"></i> Login</RouterLink>
         </li>
       </ul>
       <ul v-else class="navbar-nav ms-auto">
@@ -56,3 +56,19 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.yumlog-logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.yumlog-logo:hover {
+  transform: scale(1.1);
+}
+
+.nav-link i {
+  margin-right: 5px;
+}
+</style>
