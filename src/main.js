@@ -3,7 +3,7 @@ import "./assets/main.css";
 import { createApp } from "vue";
 import { initializeApp } from "firebase/app";
 import { createPinia } from "pinia";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth'
 import App from "./App.vue";
 import router from "./router";
 import { useAuthStore } from "./stores/auth";
@@ -32,6 +32,9 @@ app.use(router);
 
 // Initialize auth state
 const auth = getAuth();
+// Set persistence to local (keeps user logged in until they explicitly log out)
+setPersistence(auth, browserLocalPersistence)
+
 onAuthStateChanged(auth, (user) => {
   const authStore = useAuthStore();
   authStore.setUser(user);
