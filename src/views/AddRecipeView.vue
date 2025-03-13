@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
+import { useAuthStore } from '../stores/auth';
 
 const title = ref('');
 const description = ref('');
@@ -10,6 +11,7 @@ const imageFile = ref(null); // Holds the image file
 const successMessage = ref(''); // Holds the success message
 const isFormVisible = ref(true); // Controls form visibility
 const startValidation = ref(false);
+const authStore = useAuthStore();
 
 // Add a new ingredient row
 const addIngredient = () => {
@@ -47,9 +49,15 @@ const addRecipe = async () => {
       formData.append(`ingredients[${index}][amount]`, ingredient.amount);
     });
 
+    const token = await authStore.getUser?.getIdToken();
+    console.log(token);
+
     const response = await fetch('http://localhost:3000/api/recipes', {
       method: 'POST',
       body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
 
     if (response.ok) {
