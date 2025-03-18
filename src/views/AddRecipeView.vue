@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useAuthStore } from '../stores/auth';
 
 const title = ref('');
@@ -12,6 +12,8 @@ const successMessage = ref(''); // Holds the success message
 const isFormVisible = ref(true); // Controls form visibility
 const startValidation = ref(false);
 const authStore = useAuthStore();
+const isLoading = ref(false);
+const token = ref('');
 
 // Add a new ingredient row
 const addIngredient = () => {
@@ -31,11 +33,31 @@ const handleImageUpload = (event) => {
 // Form validation
 const isValidTitle = computed(() => title.value.length > 2);
 
+// Asynchronously load the Bearer token
+const loadToken = async () => {
+  if (authStore.getUser) {
+    token.value = await authStore.getUser.getIdToken();
+  }
+};
+
+// Watch for changes in the user object to update the token
+watch(
+  () => authStore.getUser,
+  async (newUser) => {
+    if (newUser) {
+      await loadToken();
+    } else {
+      token.value = '';
+    }
+  }
+);
+
 const addRecipe = async () => {
   startValidation.value = true;// Start validation
   console.log(isValidTitle.value);
 
   if (isValidTitle.value) {
+    isLoading.value = true;
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -49,14 +71,20 @@ const addRecipe = async () => {
       formData.append(`ingredients[${index}][amount]`, ingredient.amount);
     });
 
-    const token = await authStore.getUser?.getIdToken();
-    console.log(token);
+    await loadToken();
+
+    // Check if token is available
+    if (!token.value) {
+      console.log('No valid token available!');
+      isLoading.value = false;
+      return;
+    }
 
     const response = await fetch('http://localhost:3000/api/recipes', {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token.value}`
       }
     });
 
@@ -64,7 +92,11 @@ const addRecipe = async () => {
       // Show success message and hide form
       successMessage.value = 'Rezept hinzugefügt!';
       isFormVisible.value = false; // Hide the form
+    } else {
+      const errorData = await response.json();
+      console.error('Error adding recipe:', errorData);
     }
+    isLoading.value = false;
   } else {
     isFormVisible.value = true; // Show the form
     console.log('Form validation failed');
@@ -79,6 +111,10 @@ const addRecipe = async () => {
         <!-- Success Message -->
         <div v-if="successMessage" class="alert alert-success text-center">
           {{ successMessage }}
+        </div>
+        <!-- Loading Indicator -->
+        <div v-if="isLoading" class="alert alert-info text-center">
+          Loading, please wait...
         </div>
         <!-- Form add recipe -->
         <form v-if="isFormVisible" @submit.prevent="addRecipe">
