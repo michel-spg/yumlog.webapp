@@ -23,12 +23,12 @@ const getImageUrl = (imageUrl) => {
       <div class="card h-100">
         <img :src="getImageUrl(recipe?.imageUrl)" class="img-fluid rounded" :alt="recipe?.title">
         <div class="card-body">
-          <h4 class="card-title">{{ recipe?.title }}</h4>
+          <h4 data-test="detail-title" class="card-title">{{ recipe?.title }}</h4>
           <p class="card-text">{{ recipe?.description }}</p>
           <p class="card-text"><strong>Dauer:</strong> {{ recipe?.duration }} minutes</p>
           <!-- add the ingredients -->
           <p class="card-text"><strong>Zutaten:</strong></p>
-          <ul class="list-group">
+          <ul data-test="ingredients-list" class="list-group">
             <li class="list-group-item" v-for="ingredient in recipe?.ingredients" :key="ingredient">
               <div class="d-flex justify-content-start">
                 <div class="p-2 w-25">{{ ingredient.name }}</div>
